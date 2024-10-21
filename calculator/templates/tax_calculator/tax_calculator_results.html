@@ -1,0 +1,104 @@
+{% load humanize %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Tax Result</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-4xl bg-gray-800 p-6 rounded-lg shadow-xl">
+        <h2 class="text-2xl font-semibold mb-6">Tax Calculation Result</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="bg-gray-700 p-4 rounded-lg">
+                <p class="text-sm text-gray-400">Your Income</p>
+                <p class="text-xl font-semibold">₹{{ income|intcomma }}</p>
+            </div>
+            <div class="bg-gray-700 p-4 rounded-lg">
+                <p class="text-sm text-gray-400">Total Tax Payable</p>
+                <p class="text-xl font-semibold">₹{{ total_tax|intcomma }}</p>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-4">Breakdown by Slab</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="text-xs uppercase bg-gray-700">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 rounded-l-lg">Slab Range (₹)</th>
+                        <th scope="col" class="px-6 py-3">Tax Rate</th>
+                        <th scope="col" class="px-6 py-3 rounded-r-lg">Tax Amount (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for detail in slab_details %}
+                    <tr class="bg-gray-600">
+                        <td class="px-6 py-4">{{ detail.slab_range }}</td>
+                        <td class="px-6 py-4">{{ detail.rate }}</td>
+                        <td class="px-6 py-4">{{ detail.tax_amount |intcomma }}</td>
+                    </tr>
+                   {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+         <div class="mt-8">
+            <h3 class="text-xl font-semibold mb-4 text-center">Tax vs. Income Visualization</h3>
+            <canvas id="taxChart" class="w-full max-w-md mx-auto"></canvas>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <a href="{% url 'tax_calculator' %}" class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-300">Calculate Again</a>
+        </div>
+    </div>
+    <script>
+    const income = {{ income }};
+    const totalTax = {{ total_tax }};
+    const remainingIncome = income - totalTax;
+
+    const ctx = document.getElementById('taxChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Tax Payable', 'Remaining Income'],
+                datasets: [{
+                    data: [totalTax, remainingIncome],
+                    backgroundColor: ['#EF4444', '#3B82F6'],
+                    hoverBackgroundColor: ['#DC2626', '#2563EB']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#D1D5DB'
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+    </script>
+</body>
+</html>
