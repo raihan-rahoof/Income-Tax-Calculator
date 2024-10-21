@@ -1,4 +1,4 @@
- Income Tax Calculator
+### Income Tax Calculator
 
 ## Overview
 This Django-based Income Tax Calculator provides a comprehensive and user-friendly tool for calculating income tax based on appropriate tax slabs. The application offers a detailed breakdown of tax liability and includes visual representations using Chart.js for enhanced understanding.
