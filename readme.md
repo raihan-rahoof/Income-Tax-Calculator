@@ -25,7 +25,7 @@ Check out the live version of the application here: [Live Link](https://income-t
 This project adheres to SOLID principles to ensure clean, maintainable, and extensible code:
 - **Single Responsibility Principle**: Each class and function has a single, well-defined responsibility.
 - **Open-Closed Principle**: The tax calculation logic is designed to be easily extendable for new tax slabs without modifying existing code.
-- **Liskov Substitution Principle**: Any derived classes (if applicable) can be substituted for their base classes without affecting the correctness of the program.
+- **Liskov Substitution Principle**: Any derived classes can be substituted for their base classes without affecting the correctness of the program.
 - **Dependency Inversion Principle**: High-level modules do not depend on low-level modules. Both depend on abstractions.
 
 ## How It Works
